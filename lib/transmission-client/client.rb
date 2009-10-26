@@ -28,6 +28,22 @@ module Transmission
       Connection.instance.send('torrent-remove', {'delete-local-data' => delete_data })
     end
 
+
+    # key                | value type & description
+    # -------------------+-------------------------------------------------
+    # "download-dir"     | string      path to download the torrent to
+    # "filename"         | string      filename or URL of the .torrent file
+    # "metainfo"         | string      base64-encoded .torrent content
+    # "paused"           | boolean     if true, don't start the torrent
+    # "peer-limit"       | number      maximum number of peers
+    # "files-wanted"     | array       indices of file(s) to download
+    # "files-unwanted"   | array       indices of file(s) to not download
+    # "priority-high"    | array       indices of high-priority file(s)
+    # "priority-low"     | array       indices of low-priority file(s)
+    # "priority-normal"  | array       indices of normal-priority file(s)
+    # 
+    # Either "filename" OR "metainfo" MUST be included.
+    # All other arguments are optional.
     def add_torrent(a)
       if a['filename'].nil? && a['metainfo'].nil?
         raise "You need to provide either a 'filename' or 'metainfo'."

@@ -24,5 +24,9 @@ Get a list of torrents and print its file names:
 	t.torrents.each do |torrent|
 		puts torrent.name
 	end
-	
+
+  t = Transmission::Client.new
+  t.add_torrent('filename' => File.expand_path("~/tmp/my_file.torrent"), 'download-dir' => File.expand_path("~/Downloads/"))	
+
+
 RDoc is still to be written, at the meantime have a look at the code to find out which methods are supported.

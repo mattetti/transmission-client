@@ -5,12 +5,16 @@ module Transmission
     def init(host, port)
       @host = host
       @port = port
-      uri = URI.parse("http://#{@host}:#{@port}")
-      @conn = Net::HTTP.start(uri.host, uri.port)
+      @uri = URI.parse("http://#{@host}:#{@port}")
+      @conn = Net::HTTP.start(@uri.host, @uri.port)
       @header = {}
     end
     
     def request(method, attributes={})
+      if ::VERSION =~ /1\.8\.\d/
+        # we have to reset the connection under ruby 1.8.x
+        @conn = Net::HTTP.start(@uri.host, @uri.port)
+      end
       res = @conn.post('/transmission/rpc',build_json(method,attributes),@header) 
       if res.class == Net::HTTPConflict && @header['x-transmission-session-id'].nil?
         @header['x-transmission-session-id'] = res['x-transmission-session-id']
